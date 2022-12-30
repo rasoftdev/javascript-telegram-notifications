@@ -18,7 +18,12 @@
    * @param {string} msn Mensaje a enviar
    * @return 
    */
-    async function sendTelegram(msn = '') {
+    /**Ests funcion asíncrona llamada sendTelegram se utiliza para enviar un mensaje a través de Telegram. La función tiene un parámetro llamado msn, que se asume que es un objeto con algunos campos (name, email, subject y message).
+    La función utiliza la configuración del bot de Telegram almacenada en un objeto llamado configTelegram, que incluye la URL base, el token de autenticación del bot, el ID del chat y el modo de parseo. Luego, la función construye una URL con esta información y agrega una serie de parámetros a ella para enviar un mensaje.
+    El cuerpo del mensaje se construye a partir de los campos del objeto msn y luego se agrega al parámetro text. También se escapa cualquier carácter especial que pueda tener el mensaje utilizando una expresión regular.
+    Finalmente, la función hace una llamada HTTP a la URL que construyó y devuelve la respuesta en formato JSON. Si hay algún error durante el proceso, la función devuelve el error en su lugar */
+
+    async function sendTelegram(msn) {
         const { baseURL, token, chat_id, parse_mode } = configTelegram;
         const endPoint = 'sendMessage';
         const url = new URL(`${baseURL}${token}/${endPoint}`);
@@ -32,7 +37,7 @@
             (x,y) => y ? y : '\\' + x);
 
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-        
+
         return await ( await fetch(url)).json().catch(error => error);
     };
 
